@@ -13,15 +13,21 @@ var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
 var Movie = require('./Movies');
+const mongooe = require('mongoose');
+const {MongoClient}=require('mongodb');
+require('dotenv').config();
 
 var app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
+app.use(passport.initialize());
 
 var router = express.Router();
+
 
 function getJSONObjectForMovieRequirement(req) {
     var json = {
@@ -84,6 +90,68 @@ router.post('/signin', function (req, res) {
             }
         })
     })
+    router.route('/movies')
+        //get /movies
+        .get((req, res) =>{
+            Movie.find({}).exec(function(error, movies){
+                if (error){
+                    console.error('Sorry, it looks like there was an error finding movies:', error);
+                }
+                res.status(200).json(movies);
+            })
+        })
+
+        .post(authJwtController.isAuthenticated,(req, res) =>{
+            //post /movies
+            const {title, releaseDate, genre, actors} = req.body;
+            if (!title){
+                return res.status(400).json({error: 'Please entire a title'});
+            }
+            const newMovie = new Movie ({title, releaseDate, genre, actors});
+
+            newMovie.save(function(error){
+                if (error){
+                    console.error('Sorry, it looks like there was an error saving this movie, please try again later.', error);
+                }
+                res.json({succes: true, msg: 'Movie was successfully saved'});
+            });
+
+        })
+
+        .put(authJwtController.isAuthenticated, (req, res) =>{
+            const {title}=req.title;
+            const {releaseDate, genre, actors} = req.body;
+            if(!title){
+                return res.status(400).json({error: 'Please entire a title'});
+            }
+            Movie.findOneAndUpdate ({title: title}, {releaseDate, genre, actors}, {new: true})
+                .then(updatedMovie =>{
+                    res.status(200).json(updatedMovie);
+                })
+                .catch(error=> res.status(500).json({error: 'Sorry, an error has occured and this movie is not able to be updated at this time'}));
+
+        })
+
+        .delete(authJwtController, (req, res) =>{
+            const {title} =req.title;
+
+            if(!title){
+                return res.status(200).json({error: 'You must enter a valid movie title'});
+            }
+            Movie.findOneAndDelete({title: title})
+                .then(deletedMovie =>{
+                    if (!deletedMovie){
+                        return res.status(404).json({error: 'This movie was not found'});
+                    }
+                  res.status(200).json({message: 'The movie has been successfully deleted'});
+                })
+                .catch(error => res.status(500).json({error: 'An error has occured, the movie has not been deleted at this time'}));
+            
+        })
+
+        .http((req, res) => {
+            res.status(405).send({message: 'This method is not supported.'});
+        })
 });
 
 app.use('/', router);
