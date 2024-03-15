@@ -19,33 +19,40 @@ require('dotenv').config();
 
 var app = express();
 
-app.use(cors());
+//app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
-app.use(passport.initialize());
+
 
 var router = express.Router();
 
+const uri = process.env.DB;
+const port = process.env.PORT || 8080;
 
-function getJSONObjectForMovieRequirement(req) {
-    var json = {
-        headers: "No headers",
-        key: process.env.UNIQUE_KEY,
-        body: "No body"
-    };
 
-    if (req.body != null) {
-        json.body = req.body;
-    }
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-    if (req.headers != null) {
-        json.headers = req.headers;
-    }
+// function getJSONObjectForMovieRequirement(req) {
+//     var json = {
+//         headers: "No headers",
+//         key: process.env.UNIQUE_KEY,
+//         body: "No body"
+//     };
 
-    return json;
-}
+//     if (req.body != null) {
+//         json.body = req.body;
+//     }
+
+//     if (req.headers != null) {
+//         json.headers = req.headers;
+//     }
+
+//     return json;
+// }
 
 router.post('/signup', function(req, res) {
     if (!req.body.username || !req.body.password) {
