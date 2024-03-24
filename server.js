@@ -28,31 +28,28 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-const uri = process.env.DB;
-const port = process.env.PORT || 8080;
-
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-// function getJSONObjectForMovieRequirement(req) {
-//     var json = {
-//         headers: "No headers",
-//         key: process.env.UNIQUE_KEY,
-//         body: "No body"
-//     };
+function getJSONObjectForMovieRequirement(req) {
+    var json = {
+        headers: "No headers",
+        key: process.env.UNIQUE_KEY,
+        body: "No body"
+    };
 
-//     if (req.body != null) {
-//         json.body = req.body;
-//     }
+    if (req.body != null) {
+        json.body = req.body;
+    }
 
-//     if (req.headers != null) {
-//         json.headers = req.headers;
-//     }
+    if (req.headers != null) {
+        json.headers = req.headers;
+    }
 
-//     return json;
-// }
+    return json;
+}
 
 router.post('/signup', function(req, res) {
     if (!req.body.username || !req.body.password) {
