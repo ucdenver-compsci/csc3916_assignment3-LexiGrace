@@ -72,4 +72,5 @@ Movie.instertMany(movies)
     .catch(err => console.error(err));
 
 // return the model
-module.exports = mongoose.model('Movie', MovieSchema);
+//module.exports = mongoose.model('Movie', MovieSchema);
+module.exports = Movie;

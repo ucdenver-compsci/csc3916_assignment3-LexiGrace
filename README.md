@@ -58,11 +58,11 @@ Create a collection in MongoDB to hold information about movies
 * If Query String (Later Homework) reviews=true aggregate in reviews |
 
 ## Rubic
-- -5 for missing REACT site (-2 if you are not able to signup or signin on the react site) that is all we implemented
+- -5 for missing REACT site (-2 if you are not able to signup or signin on the react site) that is all we implemented //having issues getting deployed
 - -1 for MovieSchema missing any of the attributes (array of actors, genre, year released or title)
 - -2 for missing routes for /movies (POST/PUT/DELETE/GET)
 - -1 for missing authentication on routes
-- -2 for not deployed on Heroku/Render
+- -2 for not deployed on Heroku/Render //having issues getting deployed
 - -1 missing Test error conditions
 - -1 missing PostMan tests (signup, signin, separate call for each route)
 
