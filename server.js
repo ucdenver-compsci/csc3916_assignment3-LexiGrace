@@ -129,7 +129,7 @@ router.post('/signin', function (req, res) {
             res.status(405).send({message: 'This method is not supported.'});
         });
 
-    router.http('/movies', authJwtController.isAuthenticated, (req, res) => {
+    router.all('/movies', authJwtController.isAuthenticated, (req, res) => {
         res.status(405).send({message: 'This method is not supported.'});
     });
 
