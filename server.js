@@ -125,9 +125,13 @@ router.post('/signin', function (req, res) {
         })
         
 
-    router.all('/movies', authJwtController.isAuthenticated, (req, res) => {
+    router.delete('/movies', authJwtController.isAuthenticated, (req, res) => {
             res.status(405).send({message: 'This method is not supported.'});
         });
+
+    router.http('/movies', authJwtController.isAuthenticated, (req, res) => {
+        res.status(405).send({message: 'This method is not supported.'});
+    });
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
