@@ -96,19 +96,19 @@ router.post('/signin', function (req, res) {
         })
     })
 });
-    router.route('/movies')
         //get /movies
-        .get((req, res) =>{
-            Movie.find({}).exec(function(error, movies){
-                if (error){
-                    console.error('Sorry, it looks like there was an error finding movies:', error);
-                }
+    router.get('/movies', authJwtController.isAuthenticated, (req, res) =>{
+        Movie.find({title: { $exists: true}})
+            .then(movies => {
                 res.status(200).json(movies);
             })
+            .catch(error => {
+                console.error('Sorry, it looks like there was an error finding movies:', error);
+                res.status(500).json({error: 'An error has occurred while looking for this movies'});
+            });
         })
-
-        .post(authJwtController.isAuthenticated,(req, res) =>{
-            //post /movies
+        //post /movies
+    router.post('/movies',authJwtController.isAuthenticated,(req, res) =>{
             const {title, releaseDate, genre, actors} = req.body;
             if (!title){
                 return res.status(400).json({error: 'Please entire a title'});
