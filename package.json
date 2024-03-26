@@ -29,6 +29,7 @@
     "http": "0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "mongo": "^0.1.0",
+    "mongodb": "^6.5.0",
     "mongoose": "^5.13.22",
     "mongosh": "^2.2.1",
     "passport": "^0.6.0",

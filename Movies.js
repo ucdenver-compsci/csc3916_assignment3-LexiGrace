@@ -19,7 +19,7 @@ const MovieSchema = new mongoose.Schema({
     }],
 });
 
-const Movie = mongoose.model('Model', MovieScheme);
+const Movie = mongoose.model('Model', MovieSchema);
 
 const movies= [
     {
@@ -67,10 +67,10 @@ const movies= [
     },
 ];
 
-Movie.instertMany(movies)
-    .then(() => console.log('All movies have been successfully inserted'))
-    .catch(err => console.error(err));
+// Movie.instertMany(movies)
+//     .then(() => console.log('All movies have been successfully inserted'))
+//     .catch(err => console.error(err));
 
 // return the model
-//module.exports = mongoose.model('Movie', MovieSchema);
+module.exports = mongoose.model('Movie', MovieSchema);
 module.exports = Movie;
