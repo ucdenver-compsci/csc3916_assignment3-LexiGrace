@@ -109,31 +109,25 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) =>{
             console.error('Sorry, it looks like there was an error finding movies:', error);
             res.status(500).json({error: 'An error has occurred while looking for this movies'});
         });
-    })
+});
         //post /movies
 router.post('/movies',authJwtController.isAuthenticated,(req, res) =>{
-        const {title, releaseDate, genre, actors} = req.body;
-        if (!title){
-            return res.status(400).json({error: 'Please entire a title of a new movie'});
-        }
-        const newMovie = new Movie ({title, releaseDate, genre, actors});
+    const {title, releaseDate, genre, actors} = req.body;
+    if (!title){
+        return res.status(400).json({error: 'Please entire a title of a new movie'});
+    }
+    const newMovie = new Movie ({title, releaseDate, genre, actors});
 
-        newMovie.save(function(err){
-            if (err.code == 11000){
-                return res.status(400).json({
-                    success: "false",
-                    message: "It looks like that title already exsist"
-                });
-            }
-            return res.status(500).send();
+    newMovie.save()
+        .then(savedMovie =>{
+            res.status(200).json(savedMovie);
         });
-
-    })
+});
         
 
 router.delete('/movies', authJwtController.isAuthenticated, (req, res) => {
         res.status(405).send({message: 'The Delete method is not yet supported.'});
-    });
+});
 
 router.all('/movies', authJwtController.isAuthenticated, (req, res) => {
     res.status(405).send({message: 'This method is not supported.'});
