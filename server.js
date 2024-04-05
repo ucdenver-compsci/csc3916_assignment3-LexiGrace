@@ -10,16 +10,18 @@ var passport = require('passport');
 //var authController = require('./auth');
 var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
-//var cors = require('cors');
+var cors = require('cors');
 var User = require('./Users');
 var Movie = require('./Movies');
 const mongoose = require('mongoose');
 // const {MongoClient}=require('mongodb');
-// require('dotenv').config();
+require('dotenv').config();
 
 var app = express();
 
-//app.use(cors());
+app.use(cors({
+    origin: 'https://csc3916-react-lexigrace.onrender.com'
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -62,7 +64,7 @@ router.post('/signup', function(req, res) {
         user.username = req.body.username;
         user.password = req.body.password;
 
-        User.save(function(err){
+        user.save(function(err){
             if (err) {
                 if (err.code == 11000)
                     return res.json({ success: false, message: 'A user with that username already exists.'});
