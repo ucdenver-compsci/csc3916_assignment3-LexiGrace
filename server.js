@@ -59,10 +59,11 @@ router.post('/signup', function(req, res) {
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please include both username and password to signup.'})
     } else {
-        var user = new User();
-        user.name = req.body.name;
-        user.username = req.body.username;
-        user.password = req.body.password;
+        var user = new User({
+        name: req.body.name,
+        username: req.body.username,
+        password: req.body.password,
+        })
 
         user.save(function(err){
             if (err) {
