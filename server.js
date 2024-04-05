@@ -62,7 +62,7 @@ router.post('/signup', function(req, res) {
         user.username = req.body.username;
         user.password = req.body.password;
 
-        user.save(function(err){
+        User.save(function(err){
             if (err) {
                 if (err.code == 11000)
                     return res.json({ success: false, message: 'A user with that username already exists.'});
@@ -111,22 +111,25 @@ router.post('/signin', function (req, res) {
     router.post('/movies',authJwtController.isAuthenticated,(req, res) =>{
             const {title, releaseDate, genre, actors} = req.body;
             if (!title){
-                return res.status(400).json({error: 'Please entire a title'});
+                return res.status(400).json({error: 'Please entire a title of a new movie'});
             }
             const newMovie = new Movie ({title, releaseDate, genre, actors});
 
-            newMovie.save(function(error){
-                if (error){
-                    console.error('Sorry, it looks like there was an error saving this movie, please try again later.', error);
+            newMovie.save(function(err){
+                if (err.code == 11000){
+                    return res.status(400).json({
+                        success: "false",
+                        message: "It looks like that title already exsist"
+                    });
                 }
-                res.json({succes: true, msg: 'Movie was successfully saved'});
+                return res.status(500).send();
             });
 
         })
         
 
     router.delete('/movies', authJwtController.isAuthenticated, (req, res) => {
-            res.status(405).send({message: 'This method is not supported.'});
+            res.status(405).send({message: 'The Delete method is not yet supported.'});
         });
 
     router.all('/movies', authJwtController.isAuthenticated, (req, res) => {
